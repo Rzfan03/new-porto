@@ -1,0 +1,33 @@
+---
+const NavLinks = [
+  {
+    text: "Home",
+    Href: "/"
+  },
+  {
+    text: "About Me!",
+    Href: "/about"
+  },
+  {
+    text: "Projects",
+    Href: "/projects"
+  },
+  {
+    text: "Blog",
+    Href: "/blog"
+  }
+]
+import datas from "../config/config";
+import type { NavLinks } from "../types/NavLinks"
+---
+
+<nav class="flex flex-col gap-3 p-2">
+    <p class="font-medium text-white text-3xl">{`${datas.Name}`}</p>
+    <div class="flex flex-col gap-3">
+            {NavLinks.map((links: NavLinks) => (
+            <a class="text-white font-mono text-xl hover:scale-92 transition-all hover:opacity-50" href={links.Href}>
+                {links.text}
+            </a>
+            ))}
+    </div>
+</nav>
