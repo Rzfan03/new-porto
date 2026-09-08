@@ -88,16 +88,26 @@ githubData = res.data
    </section>
 
    <!-- setup section -->
-   <section id="my-setup" class="">
-        <p class="text-white font-bold text-2xl underline mb-4">My Setup</p>
-       <img loading="lazy" class="w-4xl h-fit object-cover border-2 border-white" src={'./setup.jpg'} />
+   <section id="my-setup">
+      <div class="relative group">
+           <img loading="lazy" class="w-4xl h-fit object-cover " src={'./setup.jpg'} />
+           <div class="absolute max-md:hidden group-hover:bg-black/60 bg-transparent bottom-0 cursor-pointer w-4xl h-20 z-20 transition-all">
+               <a href="https://github.com/Rzfan03/Kanso" class="absolute bottom-7 left-4 text-transparent group-hover:text-white underline">https://github.com/Rzfan03/Kanso</a>
+           </div>
+      </div>
 
        <div class="flex flex-col gap-2 mt-3 text-white">
            <p>Distro : <a href="https://cachyos.org/" class="underline">CachyOS</a></p>
            <p>Terminal : <a href="https://alacritty.org/" class="underline">Alacritty</a></p>
-           <p>WM : <a href="https://swaywm.org/" class="underline">Sway</a></p>
+           <p>WM : <a href="https://i3wm.org/" class="underline">i3Wm</a></p>
            <p>Editor : <a href="https://zed.dev/" class="underline">Zed</a></p>
        </div>
+   </section>
+
+   <!-- projectt section -->
+   <section id="projects" class="mt-4">
+        <p class="text-white font-bold text-2xl underline mb-4">My Projects!?</p>
+        <a href="https://github.com/Rzfan03?tab=repositories" class="text-white">check ur self in my github broo, click this text. aku nak tido</a>
    </section>
    
 </main>

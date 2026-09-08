@@ -16,7 +16,7 @@ const NavLinks = [
   },
   {
     text: "Projects",
-    Href: "/projects"
+    Href: "/#projects"
   },
   {
     text: "Blog",
@@ -27,7 +27,7 @@ import datas from "../config/config";
 import type { NavLinks } from "../types/NavLinks"
 ---
 
-<nav class="flex flex-col gap-3 p-2 sticky bottom-137 h-fit max-sm:hidden">
+<nav class="flex flex-col gap-3 p-2 sticky bottom-112 top-45 max-sm:hidden">
     <FadeInText>
          <p class="font-medium text-white text-2xl">{`${datas.Name}`}</p>
     </FadeInText>
@@ -39,5 +39,9 @@ import type { NavLinks } from "../types/NavLinks"
                 </a>
             </FadeInText>
             ))}
+
+            <FadeInText class="mt-4" duration="1.2" enchance={true}>
+                <a class="text-white underline font-mono" href="https://github.com/rzfan03">My Github</a>
+            </FadeInText>
     </div>
 </nav>
