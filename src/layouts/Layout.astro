@@ -3,7 +3,7 @@ import "../styles/global.css"
 import { Icon } from 'astro-icon/components'
 import datas from "../config/config";
 import axios from "axios"
-
+import ScaleIn from '@astroanimate/core/ScaleIn';
 
 // fallback
 let githubData;
@@ -36,13 +36,16 @@ githubData = res.data
 	</head>
 	<body class="bg-zinc-900">
 <main class="flex flex-col justify-center gap-6 p-3">
+    <!-- home section -->
    	<section id="home" class="md:h-[68vh] max-md:h-[57vh] flex justify-center items-center flex-col">
         <div class="max-md:h-screen relative">
        <!-- banner -->
-       <img class="max-sm:max-w-120 w-4xl rounded-lg border-2 border-white h-70 object-cover" src={datas.Banner}/>
-       <div class="flex gap-3 items-center absolute top-57 left-6">
-       <!-- Avatar -->
-       <img src={datas.Avatar} class="rounded-full max-md:w-30 max-md:h-30 border-3 h-41 saturate-0 hover:saturate-100 transition w-41 border-white"/>
+          <img class="max-sm:max-w-120 w-4xl rounded-lg border-2 border-white h-70 object-cover" src={datas.Banner}/>
+          <div class="flex gap-3 items-center absolute top-57 left-6">
+          <!-- Avatar -->
+      <ScaleIn enchance={true}>
+          <img src={datas.Avatar} class="rounded-full max-md:w-30 max-md:h-30 border-3 h-41 saturate-0 hover:saturate-100 transition w-41 border-white"/>
+      </ScaleIn>
       <div class="flex flex-col gap-1 mt-18 ml-2">
           <div class="flex gap-3 items-center">
               <p class="text-white font-bold text-2xl">{`${datas.Github}`}</p>
@@ -65,6 +68,8 @@ githubData = res.data
        <!-- separator -->
    </div>
    </section>
+   
+   <!-- about section -->
    <section id="about-me">
        <div class="flex flex-col gap-2 text-white">
            <p class="text-white font-bold text-2xl underline">Who am i?</p>
@@ -74,13 +79,27 @@ githubData = res.data
                <br/>
                <p class="text-md max-w-4xl">Driven by strong technical curiosity, I thrive on exploring emerging technologies, mastering new programming languages, and experimenting with modern frameworks. For me, software engineering is more than just writing code—it is about solving complex problems, writing clean and maintainable architecture, and turning ideas into impactful digital products.</p>
                <br/>
-               <p class="text-md max-w-4xl">Driven by strong technical curiosity, I thrive on exploring emerging technologies, mastering new programming languages, and experimenting with modern frameworks. For me, software engineering is more than just writing code—it is about solving complex problems, writing clean and maintainable architecture, and turning ideas into impactful digital products.</p>
+               <p class="text-md max-w-4xl max-md:hidden">Driven by strong technical curiosity, I thrive on exploring emerging technologies, mastering new programming languages, and experimenting with modern frameworks. For me, software engineering is more than just writing code—it is about solving complex problems, writing clean and maintainable architecture, and turning ideas into impactful digital products.</p>
                <br/>
-               <p class="text-md max-w-4xl">As a Linux enthusiast, I rely on Linux as my primary daily driver. I deeply align with the open-source philosophy, valuing the complete freedom it provides to control, tweak, and optimize my operating system. Tailoring my environment down to the smallest detail not only sharpens my understanding of system internals but also creates an intuitive, high-performance workflow for my daily development work.</p>
+               <p class="text-md max-w-4xl max-md:hidden">As a Linux enthusiast, I rely on Linux as my primary daily driver. I deeply align with the open-source philosophy, valuing the complete freedom it provides to control, tweak, and optimize my operating system. Tailoring my environment down to the smallest detail not only sharpens my understanding of system internals but also creates an intuitive, high-performance workflow for my daily development work.</p>
                
           </div>
        </div>
    </section>
+
+   <!-- setup section -->
+   <section id="my-setup" class="">
+        <p class="text-white font-bold text-2xl underline mb-4">My Setup</p>
+       <img loading="lazy" class="w-4xl h-fit object-cover border-2 border-white" src={'./setup.jpg'} />
+
+       <div class="flex flex-col gap-2 mt-3 text-white">
+           <p>Distro : <a href="https://cachyos.org/" class="underline">CachyOS</a></p>
+           <p>Terminal : <a href="https://alacritty.org/" class="underline">Alacritty</a></p>
+           <p>WM : <a href="https://swaywm.org/" class="underline">Sway</a></p>
+           <p>Editor : <a href="https://zed.dev/" class="underline">Zed</a></p>
+       </div>
+   </section>
+   
 </main>
 	</body>
 </html>

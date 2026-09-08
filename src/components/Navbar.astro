@@ -1,4 +1,6 @@
 ---
+import FadeInText from "@astroanimate/core/FadeInText";
+
 const NavLinks = [
   {
     text: "Home",
@@ -7,6 +9,10 @@ const NavLinks = [
   {
     text: "About Me!",
     Href: "/#about-me"
+  },
+  {
+    text: "My Setup",
+    Href: "/#my-setup"
   },
   {
     text: "Projects",
@@ -22,12 +28,16 @@ import type { NavLinks } from "../types/NavLinks"
 ---
 
 <nav class="flex flex-col gap-3 p-2 sticky bottom-137 h-fit max-sm:hidden">
-    <p class="font-medium text-white text-2xl">{`${datas.Name}`}</p>
+    <FadeInText>
+         <p class="font-medium text-white text-2xl">{`${datas.Name}`}</p>
+    </FadeInText>
     <div class="flex flex-col gap-3">
             {NavLinks.map((links: NavLinks) => (
-            <a class="text-white font-mono text-lg hover:scale-92 transition-all hover:opacity-50" href={links.Href}>
-                {links.text}
-            </a>
+            <FadeInText enchance={true} duration=1.2>
+                <a class="text-white font-mono text-lg hover:scale-92 transition-all hover:opacity-50" href={links.Href}>
+                    {links.text}
+                </a>
+            </FadeInText>
             ))}
     </div>
 </nav>
