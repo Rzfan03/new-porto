@@ -15,12 +15,12 @@ const NavLinks = [
     Href: "/#my-setup"
   },
   {
-    text: "Projects",
+    text: "My Projects",
     Href: "/#projects"
   },
   {
-    text: "Blog",
-    Href: "/blog"
+    text: "My Blog",
+    Href: "/#blog"
   }
 ]
 import datas from "../config/config";
@@ -33,15 +33,76 @@ import type { NavLinks } from "../types/NavLinks"
     </FadeInText>
     <div class="flex flex-col gap-3">
             {NavLinks.map((links: NavLinks) => (
-            <FadeInText enchance={true} duration=1.2>
-                <a class="text-white font-mono text-lg hover:scale-92 transition-all hover:opacity-50" href={links.Href}>
-                    {links.text}
-                </a>
-            </FadeInText>
+                <FadeInText>
+                    <a class="text-white font-mono text-lg hover:scale-92 transition-all hover:opacity-50" href={links.Href}>
+                        {links.text}
+                    </a>
+                </FadeInText>
             ))}
 
-            <FadeInText class="mt-4" duration="1.2" enchance={true}>
+            <FadeInText class="mt-4" duration={1.2} enhance={true}>
                 <a class="text-white underline font-mono" href="https://github.com/rzfan03">My Github</a>
             </FadeInText>
     </div>
 </nav>
+
+<!-- mobile menu -->
+<div class="sm:hidden">
+  <button id="menu-btn" class="fixed top-4 right-4 z-50 p-2 text-white cursor-pointer">
+    <span class="text-3xl leading-none" id="menu-icon">&#9776;</span>
+  </button>
+
+  <div id="mobile-menu" class="fixed inset-0 z-40 hidden flex-col justify-center gap-8 bg-zinc-900/98 backdrop-blur px-8 text-left">
+    <p class="text-white font-bold text-4xl mb-6">{`${datas.Name}`}</p>
+    {NavLinks.map((links: NavLinks) => (
+      <FadeInText>
+        <a href={links.Href} data-menu-link class="block text-white font-mono text-3xl hover:opacity-50 transition-opacity">
+          {links.text}
+        </a>
+      </FadeInText>
+    ))}
+    <FadeInText>
+      <a href="https://github.com/rzfan03" class="block text-white underline font-mono text-3xl mt-4">My Github</a>
+    </FadeInText>
+  </div>
+</div>
+
+<style>
+  #mobile-menu.slide-open { animation: slideLeftIn .45s cubic-bezier(.22,1,.36,1) forwards; }
+  #mobile-menu.slide-closed { animation: slideLeftOut .3s ease forwards; }
+  @keyframes slideLeftIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+  @keyframes slideLeftOut { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+</style>
+
+<script>
+  const btn = document.getElementById("menu-btn");
+  const menu = document.getElementById("mobile-menu");
+  const icon = document.getElementById("menu-icon");
+
+  if (btn && menu) {
+    const toggle = (open) => {
+      if (open) {
+        menu.classList.add("show");
+        menu.classList.remove("hidden");
+        menu.classList.add("flex");
+        menu.classList.remove("slide-closed");
+        void menu.offsetWidth;
+        menu.classList.add("slide-open");
+        icon.textContent = "\u00D7";
+      } else {
+        menu.classList.remove("slide-open");
+        menu.classList.add("slide-closed");
+        icon.textContent = "\u2630";
+        setTimeout(() => {
+          menu.classList.add("hidden");
+          menu.classList.remove("flex", "show");
+        }, 300);
+      }
+    };
+
+    btn.addEventListener("click", () => toggle(!menu.classList.contains("show")));
+    document.querySelectorAll("[data-menu-link]").forEach((link) =>
+      link.addEventListener("click", () => toggle(false))
+    );
+  }
+</script>

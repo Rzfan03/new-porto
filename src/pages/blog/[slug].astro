@@ -1,0 +1,84 @@
+---
+import { getCollection, render } from 'astro:content';
+import { ClientRouter } from 'astro:transitions';
+import FadeInText from '@astroanimate/core/FadeInText';
+import ScaleIn from '@astroanimate/core/ScaleIn';
+import datas from '../../config/config';
+import '../../styles/global.css';
+import SpotifyIsland from '../../components/SpotifyIsland.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
+}
+
+function slugify(text) {
+  return text.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, desc, date, author, cover } = post.data;
+
+const headings = (post.body.match(/^##\s+(.+)$/gm) ?? []).map((h) => {
+  const text = h.replace(/^##\s+/, '');
+  return { text, id: slugify(text) };
+});
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <ClientRouter />
+    <title>{title} | {datas.Name}</title>
+  </head>
+  <body class="bg-zinc-900 text-zinc-200">
+    <main class="flex justify-center gap-10 mt-16 p-3">
+      <article class="flex flex-col gap-6 w-full max-w-3xl">
+        <FadeInText as="a" href="/" class="self-start flex items-center gap-2 text-zinc-400 hover:text-white transition-colors font-mono text-sm">
+          <span aria-hidden="true">&#8592;</span> back
+        </FadeInText>
+        <header class="flex flex-col gap-2 border-b border-zinc-800 pb-4">
+          {cover && <ScaleIn enhance={true}><img src={cover} alt={title} class="w-full h-56 object-cover rounded-lg border border-zinc-800" /></ScaleIn>}
+          <FadeInText as="h1" class="text-white font-bold text-3xl">{title}</FadeInText>
+          <FadeInText as="p" class="text-zinc-400">{desc}</FadeInText>
+          <FadeInText as="div" class="flex items-center gap-4 text-zinc-500 text-sm font-mono">
+            {author && <span>by {author}</span>}
+            {date && <span>{date.toISOString().slice(0, 10)}</span>}
+          </FadeInText>
+        </header>
+        <FadeInText class="markdown max-w-none" enhance={true}>
+          <Content />
+        </FadeInText>
+      </article>
+
+      {headings.length > 0 && (
+        <aside class="hidden lg:block sticky top-6 self-start w-56 shrink-0">
+          <FadeInText class="text-zinc-500 font-mono text-sm mb-3" as="p">[Table of Contents]</FadeInText>
+          <FadeInText as="nav" class="flex flex-col gap-2 border-l border-zinc-800 pl-3">
+            {headings.map((h) => (
+              <a href={`#${h.id}`} class="text-white font-mono text-sm hover:opacity-50 transition-opacity">
+                {h.text}
+              </a>
+            ))}
+          </FadeInText>
+        </aside>
+      )}
+    </main>
+
+    <script>
+      document.querySelectorAll('.markdown h2').forEach((h) => {
+        if (!h.id) h.id = h.textContent.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+      });
+    </script>
+    <SpotifyIsland />
+  </body>
+</html>

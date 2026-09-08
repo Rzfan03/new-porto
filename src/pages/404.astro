@@ -1,0 +1,28 @@
+---
+import '@fontsource/poppins';
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import FadeInText from '@astroanimate/core/FadeInText';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <ClientRouter />
+    <title>404 | Lu Nyasar</title>
+  </head>
+  <body class="bg-zinc-900 text-zinc-200">
+    <main class="flex flex-col items-center justify-center gap-6 min-h-screen p-6 text-center">
+      <FadeInText as="p" class="text-white text-8xl font-bold">404</FadeInText>
+      <FadeInText as="p" class="text-white font-bold text-2xl max-w-lg">
+        Balik ke home lahh, kau ngapain cari-cari yang nggak ada!
+      </FadeInText>
+      <FadeInText as="a" class="text-white underline" href="/">
+        balik lahh ko!
+      </FadeInText>
+    </main>
+  </body>
+</html>

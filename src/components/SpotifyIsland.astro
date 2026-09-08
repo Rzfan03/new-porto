@@ -1,0 +1,184 @@
+---
+const USER_ID = "1241671009820741632";
+---
+
+<div id="island" class="fixed top-4 left-0 right-0 mx-auto w-max z-50 hidden">
+  <button
+    id="island-btn"
+    class="flex items-center gap-3 bg-zinc-900/95 backdrop-blur border border-zinc-700 rounded-full px-4 py-2 cursor-pointer text-left transition-all duration-500 overflow-hidden"
+  >
+    <svg class="w-9 h-9 shrink-0" viewBox="0 0 24 24" fill="#1DB954" aria-hidden="true">
+      <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.5 17.3c-.23.37-.7.48-1.07.25-2.93-1.79-6.62-2.19-10.96-1.2-.42.1-.84-.16-.94-.58-.1-.42.16-.84.58-.94 4.78-1.09 8.89-.63 12.2 1.4.36.23.47.7.24 1.07zm1.47-3.27c-.29.47-.9.61-1.37.32-3.35-2.06-8.46-2.66-12.43-1.45-.52.16-1.08-.14-1.24-.66-.16-.52.14-1.08.66-1.24 4.48-1.35 10.06-.7 13.9 1.7.46.29.6.9.48 1.33zM19.4 10.6C15.6 8.2 8.4 8.2 4.6 9.9c-.62.28-1.35-.02-1.62-.65-.27-.62.02-1.34.64-1.62C8.2 5.8 16.3 5.8 20.6 8.4c.62.37.82 1.16.46 1.78-.37.62-1.16.82-1.78.46z"/>
+    </svg>
+
+    <span class="min-w-0 leading-tight">
+      <span id="island-title" class="block text-white text-sm font-semibold truncate max-w-40">Loading...</span>
+      <span id="island-artist" class="block text-zinc-400 text-xs truncate max-w-40"></span>
+    </span>
+
+    <span class="flex items-end gap-0.5 h-5 shrink-0" id="viz" aria-hidden="true">
+      <span class="viz-bar w-0.5 bg-[#1DB954]"></span>
+      <span class="viz-bar w-0.5 bg-[#1DB954]"></span>
+      <span class="viz-bar w-0.5 bg-[#1DB954]"></span>
+      <span class="viz-bar w-0.5 bg-[#1DB954]"></span>
+    </span>
+  </button>
+
+  <div id="island-detail" class="mt-2 bg-zinc-900/95 border border-zinc-700 rounded-xl p-4 w-72">
+    <div class="flex items-center gap-3">
+      <img id="detail-cover" src="" alt="" class="w-16 h-16 rounded-lg object-cover shrink-0 bg-zinc-700" />
+      <div class="min-w-0 flex-1">
+        <p id="detail-title" class="text-white font-semibold text-sm truncate"></p>
+        <p id="detail-artist" class="text-zinc-400 text-sm truncate"></p>
+        <p id="detail-album" class="text-zinc-500 text-xs truncate"></p>
+      </div>
+      <a id="detail-link" href="#" target="_blank" rel="noreferrer" class="shrink-0 text-xs text-[#1DB954] hover:underline">Open</a>
+    </div>
+    <div class="mt-3">
+      <div class="h-1 w-full bg-zinc-700 rounded-full overflow-hidden">
+        <div id="detail-progress" class="h-full bg-[#1DB954] rounded-full" style="width:0%"></div>
+      </div>
+      <div class="flex justify-between text-zinc-500 text-[10px] font-mono mt-1">
+        <span id="detail-cur">0:00</span>
+        <span id="detail-dur">0:00</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .viz-bar {
+    animation: eq 1s ease-in-out infinite;
+    transform-origin: bottom;
+  }
+  .viz-bar:nth-child(2) { animation-delay: .2s; }
+  .viz-bar:nth-child(3) { animation-delay: .4s; }
+  .viz-bar:nth-child(4) { animation-delay: .1s; }
+  @keyframes eq {
+    0%, 100% { height: 30%; }
+    50% { height: 100%; }
+  }
+  #island.slide-in { animation: slideDown .5s ease forwards; }
+  #island.slide-out { animation: slideUp .5s ease forwards; }
+  @keyframes slideDown { from { transform: translateY(-120%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes slideUp { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-120%); opacity: 0; } }
+
+  #island-detail {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    border-color: transparent;
+    padding-top: 0;
+    padding-bottom: 0;
+    transition: all .5s ease;
+  }
+  #island.expanded #island-detail {
+    max-height: 240px;
+    opacity: 1;
+    border-color: #3f3f46;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  #island.expanded #island-btn { border-radius: .75rem; }
+</style>
+
+<script>
+  const USER_ID = "1241671009820741632";
+  const island = document.getElementById("island");
+  const btn = document.getElementById("island-btn");
+  const detail = document.getElementById("island-detail");
+  const titleEl = document.getElementById("island-title");
+  const artistEl = document.getElementById("island-artist");
+  const dTitle = document.getElementById("detail-title");
+  const dArtist = document.getElementById("detail-artist");
+  const dAlbum = document.getElementById("detail-album");
+  const dCover = document.getElementById("detail-cover");
+  const dLink = document.getElementById("detail-link");
+  const dProg = document.getElementById("detail-progress");
+  const dCur = document.getElementById("detail-cur");
+  const dDur = document.getElementById("detail-dur");
+  let expanded = false;
+
+  function fmt(sec) {
+    if (!sec && sec !== 0) return "0:00";
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return `${m}:${s.toString().padStart(2, "0")}`;
+  }
+
+  function coverUrl(id) {
+    if (!id) return "";
+    const match = id.match(/spotify:ab67616d(.+)/);
+    if (match) return `https://i.scdn.co/image/ab67616d${match[1]}`;
+    const generic = id.match(/spotify:(.+)/);
+    if (generic) return `https://i.scdn.co/image/${generic[1]}`;
+    return id;
+  }
+
+  function show(data) {
+    dTitle.textContent = data.details;
+    dArtist.textContent = data.state;
+    dAlbum.textContent = data.name;
+    dCover.src = coverUrl(data.assets?.large_image);
+    dLink.href = `https://open.spotify.com/search/${encodeURIComponent(data.details + " " + data.state)}`;
+    titleEl.textContent = data.details;
+    artistEl.textContent = data.state;
+  }
+
+  function reveal() {
+    island.classList.remove("hidden", "slide-out");
+    island.classList.add("slide-in");
+  }
+  function hide() {
+    collapsed();
+    island.classList.remove("slide-in");
+    island.classList.add("slide-out");
+    setTimeout(() => island.classList.add("hidden"), 500);
+  }
+  function collapsed() {
+    expanded = false;
+    island.classList.remove("expanded");
+  }
+  function expand() {
+    expanded = true;
+    island.classList.add("expanded");
+  }
+
+  btn.addEventListener("click", () => (expanded ? collapsed() : expand()));
+  document.addEventListener("click", (e) => {
+    if (expanded && !btn.contains(e.target) && !detail.contains(e.target)) collapsed();
+  });
+
+  setInterval(() => {
+    if (!window.__track) return;
+    const t = window.__track;
+    const start = t.timestamps?.start ?? Date.now();
+    const end = t.timestamps?.end;
+    if (!end) return;
+    const total = (end - start) / 1000;
+    const cur = Math.max(0, Math.min(total, (Date.now() - start) / 1000));
+    dProg.style.width = `${(cur / total) * 100}%`;
+    dCur.textContent = fmt(cur);
+    dDur.textContent = fmt(total);
+  }, 1000);
+
+  const ws = new WebSocket("wss://api.lanyard.rest/socket");
+  ws.onopen = () => {
+    ws.send(JSON.stringify({ op: 2, d: { subscribe_to_id: USER_ID } }));
+  };
+  ws.onmessage = (e) => {
+    const msg = JSON.parse(e.data);
+    if (msg.op !== 0 && msg.t !== "PRESENCE_UPDATE") return;
+    const presence = msg.d;
+    const spot = presence.activities?.find((a) => a.type === 2 && a.name === "Spotify");
+    if (spot) {
+      window.__track = spot;
+      show(spot);
+      reveal();
+    } else {
+      window.__track = null;
+      hide();
+    }
+  };
+  ws.onclose = () => setTimeout(() => location.reload(), 5000);
+</script>

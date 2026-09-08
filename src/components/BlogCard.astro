@@ -1,0 +1,18 @@
+---
+const { posts } = Astro.props
+const { title, desc, date, author } = posts.data;
+const { slug } = posts.data;
+---
+
+<div class="w-4xl max-md:w-120 mt-2 text-white border-b border-zinc-800 p-2 hover:scale-98 hover:opacity-90 transition-all">
+    <a href={`blog/${slug}`} class="cursor-pointer flex flex-col gap-2">
+        <div class="flex flex-col">
+            <p class="font-mono text-xl">{title}</p>
+               <p class="text-zinc-300">{desc}</p>
+        </div>
+   <div class="flex items-center gap-4">
+       <p class="text-white">{author}</p>
+       <p class="">{date.toISOString().slice(0, 10)}</p>
+   </div>
+    </a>
+</div>

@@ -1,15 +1,22 @@
 ---
 import "../styles/global.css"
 import { Icon } from 'astro-icon/components'
+import { ClientRouter } from 'astro:transitions'
 import datas from "../config/config";
 import axios from "axios"
 import ScaleIn from '@astroanimate/core/ScaleIn';
+import FadeInText from '@astroanimate/core/FadeInText';
+import BlogCard  from "../components/BlogCard.astro";
+import { getCollection } from "astro:content";
+import SpotifyIsland  from "../components/SpotifyIsland.astro";
+
+const posts = await getCollection('blog')
 
 // fallback
 let githubData;
 
 try {
-const base_url = "https://api.github.com/users/rzfan03"
+    const base_url = `https://api.github.com/users/${datas.Github}`
 const res = await axios.get(base_url)
 githubData = res.data
   
@@ -32,6 +39,7 @@ githubData = res.data
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
+		<ClientRouter />
 		<title>Rzfan03 | Software Enginee</title>
 	</head>
 	<body class="bg-zinc-900">
@@ -43,7 +51,7 @@ githubData = res.data
           <img class="max-sm:max-w-120 w-4xl rounded-lg border-2 border-white h-70 object-cover" src={datas.Banner}/>
           <div class="flex gap-3 items-center absolute top-57 left-6">
           <!-- Avatar -->
-      <ScaleIn enchance={true}>
+      <ScaleIn enhance={true}>
           <img src={datas.Avatar} class="rounded-full max-md:w-30 max-md:h-30 border-3 h-41 saturate-0 hover:saturate-100 transition w-41 border-white"/>
       </ScaleIn>
       <div class="flex flex-col gap-1 mt-18 ml-2">
@@ -52,7 +60,7 @@ githubData = res.data
               <Icon class={'text-white bg-zinc-700 border border-zinc-800 w-6 h-6 rounded-full inset-shadow-2xs inset-shadow-zinc-500'} name="mdi:check"/>
           </div>
           <p class="text-zinc-500">{`@${datas.Nickname}`}</p>
-          <p id="TEST!" class="text-zinc-300 mb-5">{datas.Bio}</p>
+          <p class="text-zinc-300 mb-5">{datas.Bio}</p>
           <div class="flex gap-3 items-center">
               <div class="flex gap-4 items-center max-md:hidden">
                   <p class="text-white text-lg">{githubData.followers} Followers</p>
@@ -71,8 +79,8 @@ githubData = res.data
    
    <!-- about section -->
    <section id="about-me">
-       <div class="flex flex-col gap-2 text-white">
-           <p class="text-white font-bold text-2xl underline">Who am i?</p>
+       <FadeInText class="flex flex-col gap-2 text-white" enhance={true}>
+           <p class="text-white font-bold text-2xl underline">[Who am i?]</p>
           <div class="mt-3">
                <p>Let me introduce my self.</p>
                <p class="text-md max-w-4xl">Hi! I'm Rizqy Fajrul Syabani, a 17-year-old Software Engineer and dedicated Linux enthusiast with a deep passion for continuous learning and building efficient systems.</p>
@@ -84,32 +92,43 @@ githubData = res.data
                <p class="text-md max-w-4xl max-md:hidden">As a Linux enthusiast, I rely on Linux as my primary daily driver. I deeply align with the open-source philosophy, valuing the complete freedom it provides to control, tweak, and optimize my operating system. Tailoring my environment down to the smallest detail not only sharpens my understanding of system internals but also creates an intuitive, high-performance workflow for my daily development work.</p>
                
           </div>
-       </div>
+       </FadeInText>
    </section>
 
    <!-- setup section -->
    <section id="my-setup">
-      <div class="relative group">
-           <img loading="lazy" class="w-4xl h-fit object-cover " src={'./setup.jpg'} />
-           <div class="absolute max-md:hidden group-hover:bg-black/60 bg-transparent bottom-0 cursor-pointer w-4xl h-20 z-20 transition-all">
-               <a href="https://github.com/Rzfan03/Kanso" class="absolute bottom-7 left-4 text-transparent group-hover:text-white underline">https://github.com/Rzfan03/Kanso</a>
-           </div>
-      </div>
+         <FadeInText class="text-white font-bold text-2xl underline mb-4" as="p" enhance={true}>[My Setup]</FadeInText>
+       <FadeInText enhance={true}>
+       <div class="relative group">
+            <img loading="lazy" class="w-4xl h-fit object-cover " src={'./setup.jpg'} />
+            <div class="absolute max-md:hidden group-hover:bg-black/60 bg-transparent bottom-0 cursor-pointer w-4xl h-20 z-20 transition-all">
+                <a href="https://github.com/Rzfan03/Kanso" class="absolute bottom-7 left-4 text-transparent group-hover:text-white underline">https://github.com/Rzfan03/Kanso</a>
+            </div>
+       </div>
+       </FadeInText>
 
-       <div class="flex flex-col gap-2 mt-3 text-white">
+       <FadeInText class="flex flex-col gap-2 mt-3 text-white" enhance={true}>
            <p>Distro : <a href="https://cachyos.org/" class="underline">CachyOS</a></p>
            <p>Terminal : <a href="https://alacritty.org/" class="underline">Alacritty</a></p>
            <p>WM : <a href="https://i3wm.org/" class="underline">i3Wm</a></p>
            <p>Editor : <a href="https://zed.dev/" class="underline">Zed</a></p>
-       </div>
+       </FadeInText>
    </section>
 
    <!-- projectt section -->
-   <section id="projects" class="mt-4">
-        <p class="text-white font-bold text-2xl underline mb-4">My Projects!?</p>
-        <a href="https://github.com/Rzfan03?tab=repositories" class="text-white">check ur self in my github broo, click this text. aku nak tido</a>
+   <section id="projects" class="mt-4 h-[35vh]">
+        <FadeInText class="text-white font-bold text-2xl underline mb-4" as="p" enhance={true}>[My Projects!?]</FadeInText>
+        <FadeInText as="a" href="https://github.com/Rzfan03?tab=repositories" class="text-white" enhance={true}>check in my github broo, click this text. aku nak tido</FadeInText>
+        <FadeInText enhance={true}><img class="p-2 w-56 mt-2 h-56" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIbtz082HpAYl3nU0IlmIo1dpy97zCjMeyxDUQNPzb0PmsW060vf3aIKQ&s=10"/></FadeInText>
+   </section>
+
+   <!-- blog section -->
+   <section id="blog" class="mt-4">
+        <FadeInText class="text-white font-bold text-2xl underline mb-4" as="p" enhance={true}>[My Blog]</FadeInText>
+         {posts.map((post, i) => <ScaleIn enhance={true} delay={i * 100}><BlogCard posts={post} /></ScaleIn>)}
    </section>
    
 </main>
+<SpotifyIsland />
 	</body>
 </html>
